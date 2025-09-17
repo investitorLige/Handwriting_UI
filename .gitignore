@@ -5,7 +5,7 @@
 *.swp
 .buildlog/
 .history
-
+.idea/
 
 
 # Flutter repo-specific
@@ -116,3 +116,31 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+# VS Code - safe entries that won't break anything
+.vscode/
+.history/
+*.vsix
+
+# IntelliJ/Android Studio
+.idea/
+*.iml
+
+# Flutter analysis and dev tools (personal preferences)
+analysis_options.yaml
+devtools_options.yaml
+
+# Additional Flutter entries
+.fvm/flutter_sdk
+.fvm/fvm_config.json
+.metadata
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Firebase (if using)
+**/android/app/google-services.json
+**/ios/Runner/GoogleService-Info.plist
+**/lib/firebase_options.dart
