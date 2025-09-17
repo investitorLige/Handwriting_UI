@@ -17,6 +17,7 @@ class _AnimatedTitleState extends State<AnimatedTitle> with SingleTickerProvider
   @override
   void initState(){
     super.initState();
+    
 
     _titlecontroller = AnimationController(vsync: this, duration: Duration(seconds: 3));
     _titlecontroller.repeat();
@@ -30,19 +31,26 @@ class _AnimatedTitleState extends State<AnimatedTitle> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
       children:[
+        Align(
+          alignment: Alignment(-0.25, 0),
+          child: Image.asset(
+            'images/emoji/eyes-inverted.png',
+            width: 64,
+            height: 64,
+        ),
 
-        Image.asset('images/emoji/eyes-inverted.png',
-        width: 24,
-        height: 24,
         ),
         
-        SizedBox(width: 20),
+        
+       // SizedBox(width: 30),
 
-        Text("yaya" , style: TextStyle(fontSize: 24),)
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            "yaya"
+             , style: TextStyle(fontSize: 24),)
         .animate(
           onPlay: (controller) => controller.repeat(reverse: true),
         )
@@ -50,7 +58,9 @@ class _AnimatedTitleState extends State<AnimatedTitle> with SingleTickerProvider
           begin: 0.8,
           end: 1.4,
           duration: Duration(seconds: 2)
+        ),
         )
+
       ]
   
     );

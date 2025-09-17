@@ -10,11 +10,12 @@ import 'package:vibration/vibration.dart';
 import 'dart:math' as math;
 import 'dart:async';
 
+import '../../../data/services/audio/background_service.dart';
 import '../../../data/services/file_service.dart';
 import '../../../data/services/camera_service.dart';
 import '../widgets/animated_title.dart';
 import '../widgets/option_card.dart';
-import '../widgets/mouse_trail.dart';
+// import '../widgets/mouse_trail.dart';
 import '../../../core/constants/parser_constants.dart';
 
 class ParserScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class ParserScreen extends StatefulWidget {
 }
 
 class ParserScreenState extends State<ParserScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin , WidgetsBindingObserver{
   
   final FileService _fileService = FileService();
   final CameraService _cameraService = CameraService();
@@ -35,6 +36,8 @@ class ParserScreenState extends State<ParserScreen>
   
   List<Particle> particles = [];
   Timer? _particleTimer;
+
+  late bool _isPlaying;
 
   @override
   void initState() {
@@ -49,9 +52,12 @@ class ParserScreenState extends State<ParserScreen>
       duration: Duration(seconds: 15),
       vsync: this,
     )..repeat();
+
+    //BackgroundMusicService.play();
     
     _initializeParticles();
     _startParticleAnimation();
+    _isPlaying = false;
   }
 
   @override
@@ -60,6 +66,23 @@ class ParserScreenState extends State<ParserScreen>
     _particleController.dispose();
     _particleTimer?.cancel();
     super.dispose();
+    BackgroundMusicService.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.paused:
+        BackgroundMusicService.pause();
+        _isPlaying = false;
+        break;
+      case AppLifecycleState.resumed:
+        BackgroundMusicService.play();
+        _isPlaying = true;
+        break;
+      default:
+        break;
+    }
   }
 
   void _initializeParticles() {
@@ -318,7 +341,7 @@ class ParserScreenState extends State<ParserScreen>
                           SizedBox(height: 16),
                           
                           Text(
-                            'Upload or capture documents for intelligent processing',
+                            'Parse your Chinese, 政府正在关注 ',
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.white.withValues(alpha: 0.7),
@@ -363,7 +386,7 @@ class ParserScreenState extends State<ParserScreen>
                         Expanded(
                           child: EnhancedOptionCard(
                             title: 'Capture Photo',
-                            description: 'Use your device camera to capture documents in real-time. Perfect for quick scanning on the go.',
+                            description: 'Use your device camera to capture documents in real-time',
                             icon: '📸',
                             lottieAsset: 'assets/animations/thumbs_up.json',
                             primaryColor: AppColors.cameraPrimary,
@@ -379,7 +402,27 @@ class ParserScreenState extends State<ParserScreen>
                     ),
                   ),
                   
-                  SizedBox(height: 60),
+                  SizedBox(height: 20),
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: FloatingActionButton(
+                      onPressed: (){
+                        if(!_isPlaying){
+                          BackgroundMusicService.play();
+                          _isPlaying = true;
+                        }
+                        else{
+                          BackgroundMusicService.pause();
+                          _isPlaying = false;
+                        }
+                         },
+                      child: Icon(Icons.speaker),
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+                  
                 ],
               ),
             ),
