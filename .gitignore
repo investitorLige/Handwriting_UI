@@ -140,7 +140,27 @@ devtools_options.yaml
 .env.local
 .env.production
 
-# Firebase (if using)
+# Firebase - additional entries
 **/android/app/google-services.json
 **/ios/Runner/GoogleService-Info.plist
 **/lib/firebase_options.dart
+firebase_app_id_file.json
+.firebaserc
+firebase-debug.log*
+.firebase/
+.runtimeconfig.json
+
+# Firebase Functions (if using)
+**/functions/node_modules/
+**/functions/.env
+**/functions/lib/
+functions/src/**/*.js
+functions/src/**/*.js.map
+
+# Firebase Hosting (if using)
+.firebase/
+firebase-debug.log
+
+# Firebase Emulators
+ui-debug.log
+firebase-debug.*.log
