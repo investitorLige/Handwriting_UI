@@ -73,17 +73,12 @@ class _EnhancedOptionCardState extends State<EnhancedOptionCard> {
                   ),
                   child: Center(
                     child: widget.icon is String
-                      ? Text(
-                          widget.icon,
-                          style: const TextStyle(fontSize: 24),
-                        )
-                      : widget.icon is Widget
-                        ? widget.icon
-                        : Icon(
-                            Icons.help_outline,
-                            size: 24,
-                            color: widget.primaryColor,
-                          ),
+                    ? Text(widget.icon, style: TextStyle(fontSize: 24),)
+                    : widget.icon is IconData
+                      ? Icon(widget.icon)           // Handle IconData
+                      : widget.icon is Widget  
+                        ? widget.icon               // Handle Widget
+                        : Icon(Icons.help_outline)  // Fallback
                   ),
                 ),
                 

@@ -413,14 +413,14 @@ class ParserScreenState extends State<ParserScreen>
                         // Upload card
                         Expanded(
                           child: EnhancedOptionCard(
-                            title: 'Upload Files',
-                            description: 'Drag and drop your documents or browse from your device. Supports PDF, Word, and text files.',
-                            icon: Image.asset('/images/emoji/thumbs_up.jpg'),
+                            title: 'Upload Photos',
+                            description: 'Drag and drop your images or press to upload',
+                            icon: Icons.photo,
                             lottieAsset: 'assets/animations/thumbs_up.json',
                             primaryColor: AppColors.uploadPrimary,
                             secondaryColor: AppColors.uploadSecondary,
                             onTap: _handleImageUpload,
-                            actionText: 'Click or drop files here',
+                            actionText: 'Click or drop photos here',
                           ).animate()
                               .fadeIn(delay: 400.ms, duration: 800.ms)
                               .slideX(begin: -0.3, end: 0)
@@ -434,7 +434,7 @@ class ParserScreenState extends State<ParserScreen>
                           child: EnhancedOptionCard(
                             title: 'Capture Photo',
                             description: 'Use your device camera to capture documents in real-time',
-                            icon: '📸',
+                            icon: Icons.camera_alt,
                             lottieAsset: 'assets/animations/thumbs_up.json',
                             primaryColor: AppColors.cameraPrimary,
                             secondaryColor: AppColors.cameraSecondary,
