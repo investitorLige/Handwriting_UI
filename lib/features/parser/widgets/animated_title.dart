@@ -34,11 +34,11 @@ class _AnimatedTitleState extends State<AnimatedTitle> with SingleTickerProvider
     return Stack(
       children:[
         Align(
-          alignment: Alignment(-0.25, 0),
+          alignment: Alignment(-0.35, 0),
           child: Image.asset(
             'images/emoji/eyes-inverted.png',
-            width: 64,
-            height: 64,
+            width: 94,
+            height: 94,
         ),
 
         ),
@@ -50,7 +50,7 @@ class _AnimatedTitleState extends State<AnimatedTitle> with SingleTickerProvider
           alignment: Alignment.center,
           child: Text(
             "yaya"
-             , style: TextStyle(fontSize: 24),)
+             , style: TextStyle(fontSize: 34),)
         .animate(
           onPlay: (controller) => controller.repeat(reverse: true),
         )

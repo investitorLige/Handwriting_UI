@@ -11,7 +11,7 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import '../../../data/services/audio/background_service.dart';
-import '../../../data/services/file_service.dart';
+import '../../../data/services/gallery_service.dart';
 import '../../../data/services/camera_service.dart';
 import '../widgets/animated_title.dart';
 import '../widgets/option_card.dart';
@@ -28,7 +28,7 @@ class ParserScreen extends StatefulWidget {
 class ParserScreenState extends State<ParserScreen>
     with TickerProviderStateMixin , WidgetsBindingObserver{
   
-  final FileService _fileService = FileService();
+  final GalleryService _galleryService = GalleryService();
   final CameraService _cameraService = CameraService();
   
   late AnimationController _mainController;
@@ -38,6 +38,7 @@ class ParserScreenState extends State<ParserScreen>
   Timer? _particleTimer;
 
   late bool _isPlaying;
+  late bool _isLoading;
 
   @override
   void initState() {
@@ -58,6 +59,7 @@ class ParserScreenState extends State<ParserScreen>
     _initializeParticles();
     _startParticleAnimation();
     _isPlaying = false;
+    _isLoading = false;
   }
 
   @override
@@ -85,6 +87,50 @@ class ParserScreenState extends State<ParserScreen>
     }
   }
 
+ Future<void> _toggleMusic() async {
+    if (_isLoading) return; // Prevent multiple taps
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      if (!_isPlaying) {
+        await BackgroundMusicService.play();
+        if (mounted) {
+          setState(() {
+            _isPlaying = true;
+            _isLoading = false;
+          });
+        }
+      } else {
+        await BackgroundMusicService.pause();
+        if (mounted) {
+          setState(() {
+            _isPlaying = false;
+            _isLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      // Handle errors (network issues, permissions, etc.)
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to ${_isPlaying ? 'pause' : 'play'} music'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+
+
   void _initializeParticles() {
     particles = List.generate(12, (index) {
       return Particle(
@@ -107,14 +153,14 @@ class ParserScreenState extends State<ParserScreen>
     });
   }
 
-  Future<void> _handleFileUpload() async {
+  Future<void> _handleImageUpload() async {
     await _triggerHaptic();
     
     try {
-      final files = await _fileService.pickFiles();
-      if (files.isNotEmpty) {
+      final images = await _galleryService.pickImages();
+      if (images != null && images.isEmpty) {
         _showEnhancedDialog(
-          _fileService.getRandomSuccessMessage(files.length),
+          _galleryService.getRandomCaptureMessage(),
           AppColors.uploadPrimary,
         );
       }
@@ -162,7 +208,7 @@ class ParserScreenState extends State<ParserScreen>
           backgroundColor: Colors.transparent,
           child: GlassmorphicContainer(
             width: 320,
-            height: 200,
+            height: 400,
             borderRadius: 24,
             blur: 20,
             alignment: Alignment.center,
@@ -254,6 +300,7 @@ class ParserScreenState extends State<ParserScreen>
                 ],
               ),
             ),
+            
           ),
         );
       },
@@ -372,7 +419,7 @@ class ParserScreenState extends State<ParserScreen>
                             lottieAsset: 'assets/animations/thumbs_up.json',
                             primaryColor: AppColors.uploadPrimary,
                             secondaryColor: AppColors.uploadSecondary,
-                            onTap: _handleFileUpload,
+                            onTap: _handleImageUpload,
                             actionText: 'Click or drop files here',
                           ).animate()
                               .fadeIn(delay: 400.ms, duration: 800.ms)
@@ -407,17 +454,8 @@ class ParserScreenState extends State<ParserScreen>
                   Align(
                     alignment: Alignment.centerRight,
                     child: FloatingActionButton(
-                      onPressed: (){
-                        if(!_isPlaying){
-                          BackgroundMusicService.play();
-                          _isPlaying = true;
-                        }
-                        else{
-                          BackgroundMusicService.pause();
-                          _isPlaying = false;
-                        }
-                         },
-                      child: Icon(Icons.speaker),
+                      onPressed: () async => await _toggleMusic(),
+                      child: Icon( _isPlaying ? Icons.volume_off : Icons.volume_up),
                     ),
                   ),
 
