@@ -121,6 +121,7 @@ app.*.symbols
 .vscode/
 .history/
 *.vsix
+.devcontainer/
 
 # IntelliJ/Android Studio
 .idea/

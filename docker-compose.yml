@@ -1,7 +1,9 @@
-version: '3'
+
 services:
   flutter:
-    image: my-flutter-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - .:/app
     ports:

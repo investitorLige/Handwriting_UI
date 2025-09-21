@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handwriting_ui/features/parser/screens/presentation.dart';
+import './features/firebase/screens/authgate.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -9,10 +10,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Flutter App',
       theme: ThemeData.light(),
-      home: const AppScaffold(), // central scaffold with navbar
+      home: AuthGate(), // central scaffold with navbar
     );
   }
 }
+
 
 class AppScaffold extends StatefulWidget {
   const AppScaffold({super.key});
